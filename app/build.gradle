@@ -26,6 +26,8 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:27.1.1'
     compile 'com.android.support:recyclerview-v7:27.1.1'
-    // TODO (3) Add play-services-places and play-services-location dependencies
+    // DONE (3) Add play-services-places and play-services-location dependencies
+    compile 'com.google.android.gms:play-services-places:15.0.0'
+    compile 'com.google.android.gms:play-services-location:15.0.0'
     testCompile 'junit:junit:4.12'
 }
