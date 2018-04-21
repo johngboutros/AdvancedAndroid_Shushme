@@ -72,7 +72,7 @@
                 android:paddingBottom="4dp"
                 android:paddingRight="8dp"
                 android:paddingTop="4dp"
-                android:src="@drawable/ic_globe_primary_24dp" />
+                android:src="@drawable/ic_my_location_primary_24dp" />
 
             <Switch
                 android:id="@+id/permission_checkbox"
