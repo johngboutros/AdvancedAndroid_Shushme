@@ -87,6 +87,10 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
             temp = mPlaces;
         }
         mPlaces = places;
+        if (mPlaces != null) {
+            // Force RecyclerView to refresh
+            this.notifyDataSetChanged();
+        }
         return temp;
     }
 
@@ -99,7 +103,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.Plac
     public int getItemCount() {
         // DONE (5) Update getItemCount to return mPlaces's item count
         if (mPlaces != null) {
-            mPlaces.getCount();
+            return mPlaces.getCount();
         }
         return 0;
     }
