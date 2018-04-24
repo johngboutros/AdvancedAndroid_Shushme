@@ -18,6 +18,7 @@ package com.example.android.shushme;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,8 +32,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.android.shushme.geofence.Geofencing;
 import com.example.android.shushme.provider.PlaceContract;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -65,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements
     private RecyclerView mRecyclerView;
     private GoogleApiClient mClient;
 
+    private Geofencing geofencing;
+    private boolean geofencingEnabled;
+
     /**
      * Called when the activity is starting
      *
@@ -81,11 +88,33 @@ public class MainActivity extends AppCompatActivity implements
         mAdapter = new PlaceListAdapter(this, null);
         mRecyclerView.setAdapter(mAdapter);
 
-        // TODO (9) Create a boolean SharedPreference to store the state of the "Enable Geofences" switch
-        // and initialize the switch based on the value of that SharedPreference
+        geofencing = new Geofencing(this);
 
-        // TODO (10) Handle the switch's change event and Register/Unregister geofences based on the value of isChecked
+        // DONE (9) Create a boolean SharedPreference to store the state of the "Enable Geofences" switch
+        // and initialize the switch based on the value of that SharedPreference
+        Switch geofencesSwitch = findViewById(R.id.enable_switch);
+
+        geofencingEnabled = getPreferences(MODE_PRIVATE)
+                .getBoolean(getString(R.string.setting_enabled), false);
+
+        geofencesSwitch.setChecked(geofencingEnabled);
+
+        // DONE (10) Handle the switch's change event and Register/Unregister geofences based on the value of isChecked
         // as well as set a private boolean mIsEnabled to the current switch's state
+        geofencesSwitch.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    geofencing.registerAllGeofences();
+                } else {
+                    geofencing.unregisterAllGeofences();
+                }
+                SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+                editor.putBoolean(getString(R.string.setting_enabled), isChecked);
+                editor.apply();
+            }
+        });
+
 
         // Build up the LocationServices API client
         // Uses the addApi method to request the LocationServices API
@@ -98,31 +127,31 @@ public class MainActivity extends AppCompatActivity implements
                 .enableAutoManage(this, this)
                 .build();
 
-        // TODO (1) Create a Geofencing class with a Context and GoogleApiClient constructor that
+        // DONE (1) Create a Geofencing class with a Context and GoogleApiClient constructor that
         // initializes a private member ArrayList of Geofences called mGeofenceList
 
-        // TODO (2) Inside Geofencing, implement a public method called updateGeofencesList that
+        // DONE (2) Inside Geofencing, implement a public method called updateGeofencesList that
         // given a PlaceBuffer will create a Geofence object for each Place using Geofence.Builder
         // and add that Geofence to mGeofenceList
 
-        // TODO (3) Inside Geofencing, implement a private helper method called getGeofencingRequest that
+        // DONE (3) Inside Geofencing, implement a private helper method called getGeofencingRequest that
         // uses GeofencingRequest.Builder to return a GeofencingRequest object from the Geofence list
 
-        // TODO (4) Create a GeofenceBroadcastReceiver class that extends BroadcastReceiver and override
+        // DONE (4) Create a GeofenceBroadcastReceiver class that extends BroadcastReceiver and override
         // onReceive() to simply log a message when called. Don't forget to add a receiver tag in the Manifest
 
-        // TODO (5) Inside Geofencing, implement a private helper method called getGeofencePendingIntent that
+        // DONE (5) Inside Geofencing, implement a private helper method called getGeofencePendingIntent that
         // returns a PendingIntent for the GeofenceBroadcastReceiver class
 
-        // TODO (6) Inside Geofencing, implement a public method called registerAllGeofences that
+        // DONE (6) Inside Geofencing, implement a public method called registerAllGeofences that
         // registers the GeofencingRequest by calling LocationServices.GeofencingApi.addGeofences
         // using the helper functions getGeofencingRequest() and getGeofencePendingIntent()
 
-        // TODO (7) Inside Geofencing, implement a public method called unRegisterAllGeofences that
+        // DONE (7) Inside Geofencing, implement a public method called unRegisterAllGeofences that
         // unregisters all geofences by calling LocationServices.GeofencingApi.removeGeofences
         // using the helper function getGeofencePendingIntent()
 
-        // TODO (8) Create a new instance of Geofencing using "this" as the context and mClient as the client
+        // DONE (8) Create a new instance of Geofencing using "this" as the context and mClient as the client
 
     }
 
@@ -177,7 +206,9 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onResult(@NonNull PlaceBuffer places) {
                 mAdapter.swapPlaces(places);
-                // TODO (11) Call updateGeofenceList and registerAllGeofences if mIsEnabled is true
+                // DONE (11) Call updateGeofenceList and registerAllGeofences if mIsEnabled is true
+                geofencing.updateGeofences(places);
+                if (geofencingEnabled) geofencing.registerAllGeofences();
             }
         });
     }

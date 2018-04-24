@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
@@ -72,7 +73,7 @@ public class Geofencing {
 
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.i(TAG, "Gefencing request failed");
+                    Log.e(TAG, "Gefencing request failed: " + e.getMessage());
                 }
             });
 
@@ -98,7 +99,7 @@ public class Geofencing {
 
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.i(TAG, "Gefencing removal failed");
+                    Log.e(TAG, "Gefencing removal failed: " + e.getMessage());
                 }
             });
 
