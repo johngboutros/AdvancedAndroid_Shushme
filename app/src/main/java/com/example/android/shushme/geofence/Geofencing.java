@@ -118,6 +118,10 @@ public class Geofencing {
             double latitude = place.getLatLng().latitude;
             double longitude = place.getLatLng().longitude;
 
+            Log.d(TAG, "* Geofencing: " + place.getName()
+                    + " (" + place.getLatLng().latitude + ","
+                    + place.getLatLng().longitude + ")");
+
             Geofence geofence = new Geofence.Builder()
                     .setRequestId(id)
                     .setExpirationDuration(GEOFENCE_TIMEOUT)
