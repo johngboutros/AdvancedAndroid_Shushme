@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.google.android.gms.location.GeofencingEvent;
+
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     public static final String TAG = GeofenceBroadcastReceiver.class.getSimpleName();
@@ -37,6 +39,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "onReceive called");
         // TODO (4) Use GeofencingEvent.fromIntent to retrieve the GeofencingEvent that caused the transition
+        GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         // TODO (5) Call getGeofenceTransition to get the transition type and use AudioManager to set the
         // phone ringer mode based on the transition type. Feel free to create a helper method (setRingerMode)
