@@ -252,21 +252,11 @@ public class MainActivity extends AppCompatActivity implements
         //TODO (3) Initialize ringer permissions checkbox
         CheckBox ringerPermissions = (CheckBox) findViewById(R.id.ringer_permission_checkbox);
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-                && !nm.isNotificationPolicyAccessGranted()) {
-            locationPermissions.setChecked(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && !nm.isNotificationPolicyAccessGranted()) {
+            ringerPermissions.setChecked(false);
         } else {
             ringerPermissions.setChecked(true);
             ringerPermissions.setEnabled(false);
-        }
-
-
-        if (ActivityCompat.checkSelfPermission(MainActivity.this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            locationPermissions.setChecked(false);
-        } else {
-            locationPermissions.setChecked(true);
-            locationPermissions.setEnabled(false);
         }
     }
 
